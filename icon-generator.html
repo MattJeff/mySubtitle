@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubStyle Icon Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 800px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .preview-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .preview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-box {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .size-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .success {
+            color: #10b981;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 SubStyle Icon Generator</h1>
+        <p>Generate beautiful icons for your SubStyle extension</p>
+
+        <div class="preview-grid">
+            <div class="preview-item">
+                <div class="preview-box">
+                    <canvas id="icon16" width="16" height="16"></canvas>
+                </div>
+                <span class="size-label">16×16</span>
+            </div>
+
+            <div class="preview-item">
+                <div class="preview-box">
+                    <canvas id="icon48" width="48" height="48"></canvas>
+                </div>
+                <span class="size-label">48×48</span>
+            </div>
+
+            <div class="preview-item">
+                <div class="preview-box">
+                    <canvas id="icon128" width="128" height="128"></canvas>
+                </div>
+                <span class="size-label">128×128</span>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="downloadIcon('icon16', 'icon16.png')">📥 Download 16×16</button>
+            <button onclick="downloadIcon('icon48', 'icon48.png')">📥 Download 48×48</button>
+            <button onclick="downloadIcon('icon128', 'icon128.png')">📥 Download 128×128</button>
+            <button onclick="downloadAll()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📦 Download All</button>
+        </div>
+
+        <div class="success" id="success">✅ Icons downloaded successfully!</div>
+    </div>
+
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+
+            // Create gradient background
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#A78BFA'); // Purple-400
+            gradient.addColorStop(1, '#EC4899'); // Pink-600
+
+            // Draw rounded rectangle background
+            const borderRadius = size * 0.2;
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, borderRadius);
+            ctx.fill();
+
+            // Draw "ST" text
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = `bold ${size * 0.5}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('ST', size / 2, size / 2);
+
+            // Add subtle inner shadow effect
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = size * 0.05;
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size * 0.35, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        function downloadIcon(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            showSuccess();
+        }
+
+        function downloadAll() {
+            setTimeout(() => downloadIcon('icon16', 'icon16.png'), 0);
+            setTimeout(() => downloadIcon('icon48', 'icon48.png'), 200);
+            setTimeout(() => downloadIcon('icon128', 'icon128.png'), 400);
+
+            showSuccess();
+        }
+
+        function showSuccess() {
+            const success = document.getElementById('success');
+            success.style.display = 'block';
+            setTimeout(() => {
+                success.style.display = 'none';
+            }, 3000);
+        }
+
+        // Generate icons on page load
+        window.onload = function() {
+            drawIcon(document.getElementById('icon16'));
+            drawIcon(document.getElementById('icon48'));
+            drawIcon(document.getElementById('icon128'));
+        };
+    </script>
+</body>
+</html>
