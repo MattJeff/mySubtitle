@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --backdrop-blur: blur(16px);
+}
+
+body {
+  @apply bg-gray-900 text-white;
+  font-family: 'Inter', sans-serif;
+}
+
+@layer components {
+  .glass-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--backdrop-blur);
+    box-shadow: var(--shadow-glass);
+    @apply rounded-xl;
+  }
+
+  .glass-button {
+    background: var(--accent-gradient);
+    @apply text-white font-bold py-2 px-4 rounded-lg transition-transform hover:scale-105 active:scale-95 shadow-lg;
+  }
+
+  .glass-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    @apply text-white px-3 py-2 rounded-lg focus:outline-none focus:border-purple-500 transition-colors;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

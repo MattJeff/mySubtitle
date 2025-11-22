@@ -1,0 +1,42 @@
+{
+    "manifest_version": 3,
+    "name": "SubStyle - Custom YouTube Subtitles",
+    "version": "1.0.0",
+    "description": "Replace native YouTube subtitles with highly stylized, animated subtitles.",
+    "permissions": [
+        "activeTab",
+        "storage",
+        "notifications",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://www.youtube.com/*",
+        "https://api.openai.com/*"
+    ],
+    "action": {
+        "default_popup": "index.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.youtube.com/watch*"
+            ],
+            "js": [
+                "src/content/index.ts"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "background": {
+        "service_worker": "src/background/service-worker.ts",
+        "type": "module"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "icons": {
+        "16": "public/icons/icon16.png",
+        "48": "public/icons/icon48.png",
+        "128": "public/icons/icon128.png"
+    }
+}

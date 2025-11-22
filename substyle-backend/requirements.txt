@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-multipart
+yt-dlp
+faster-whisper
+torch
+torchaudio
+ffmpeg-python
+pydantic
+aiofiles
