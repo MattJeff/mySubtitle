@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubStyle Promotional Images Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 1500px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .preview-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .preview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .preview-box {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            max-width: 100%;
+            height: auto;
+        }
+
+        .size-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 12px;
+            max-width: 400px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .success {
+            color: #10b981;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 SubStyle Promotional Images</h1>
+        <p>Generate Chrome Web Store promotional assets</p>
+
+        <div class="note">
+            <strong>📌 Note:</strong> These images are in RGB format (no alpha channel) as required by Chrome Web Store.
+        </div>
+
+        <div class="preview-grid">
+            <div class="preview-item">
+                <div class="preview-box">
+                    <canvas id="smallTile" width="440" height="280"></canvas>
+                </div>
+                <span class="size-label">Small Promotional Tile</span>
+                <span class="description">440×280 - Appears in Chrome Web Store listings</span>
+            </div>
+
+            <div class="preview-item">
+                <div class="preview-box">
+                    <canvas id="marqueeTile" width="1400" height="560"></canvas>
+                </div>
+                <span class="size-label">Marquee Promotional Tile</span>
+                <span class="description">1400×560 - Featured placement on Chrome Web Store</span>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button onclick="downloadImage('smallTile', 'SubStyle-Small-Tile-440x280.png')">📥 Download Small Tile (440×280)</button>
+            <button onclick="downloadImage('marqueeTile', 'SubStyle-Marquee-1400x560.png')">📥 Download Marquee (1400×560)</button>
+            <button onclick="downloadAll()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📦 Download Both</button>
+        </div>
+
+        <div class="success" id="success">✅ Images downloaded successfully!</div>
+    </div>
+
+    <script>
+        function drawSmallTile(canvas) {
+            const ctx = canvas.getContext('2d', { alpha: false });
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#A78BFA');
+            gradient.addColorStop(1, '#EC4899');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw icon circle
+            const iconSize = 80;
+            const iconX = width * 0.25;
+            const iconY = height / 2;
+
+            // Icon background circle
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.beginPath();
+            ctx.arc(iconX, iconY, iconSize / 2 + 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Icon
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 48px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('ST', iconX, iconY);
+
+            // Title
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 48px Arial';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('SubStyle', width * 0.45, height / 2 - 20);
+
+            // Tagline
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillText('Beautiful YouTube Subtitles', width * 0.45, height / 2 + 25);
+        }
+
+        function drawMarqueeTile(canvas) {
+            const ctx = canvas.getContext('2d', { alpha: false });
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#A78BFA');
+            gradient.addColorStop(0.5, '#9F7AEA');
+            gradient.addColorStop(1, '#EC4899');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Decorative circles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.beginPath();
+            ctx.arc(width * 0.15, height * 0.3, 150, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(width * 0.85, height * 0.7, 200, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Large icon on left
+            const iconSize = 200;
+            const iconX = width * 0.2;
+            const iconY = height / 2;
+
+            // Icon background
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.beginPath();
+            ctx.arc(iconX, iconY, iconSize / 2 + 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Icon text
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('ST', iconX, iconY);
+
+            // Main title
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 96px Arial';
+            ctx.textAlign = 'left';
+            const titleX = width * 0.38;
+            ctx.fillText('SubStyle', titleX, height * 0.28);
+
+            // Tagline
+            ctx.font = '42px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.fillText('Transform YouTube Subtitles', titleX, height * 0.42);
+
+            // Features
+            const features = [
+                '⚡ Lightning Fast Loading',
+                '🎨 4 Beautiful Presets',
+                '✏️ Full Customization',
+                '🎭 Smooth Animations'
+            ];
+
+            ctx.font = '28px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            let featureY = height * 0.55;
+            features.forEach((feature, index) => {
+                ctx.fillText(feature, titleX, featureY + (index * 40));
+            });
+        }
+
+        function downloadImage(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+
+            // Convert to PNG without alpha
+            canvas.toBlob((blob) => {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }, 'image/png');
+
+            showSuccess();
+        }
+
+        function downloadAll() {
+            setTimeout(() => downloadImage('smallTile', 'SubStyle-Small-Tile-440x280.png'), 0);
+            setTimeout(() => downloadImage('marqueeTile', 'SubStyle-Marquee-1400x560.png'), 500);
+
+            showSuccess();
+        }
+
+        function showSuccess() {
+            const success = document.getElementById('success');
+            success.style.display = 'block';
+            setTimeout(() => {
+                success.style.display = 'none';
+            }, 3000);
+        }
+
+        // Generate images on page load
+        window.onload = function() {
+            drawSmallTile(document.getElementById('smallTile'));
+            drawMarqueeTile(document.getElementById('marqueeTile'));
+        };
+    </script>
+</body>
+</html>
